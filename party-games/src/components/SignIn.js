@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, signIn} from "../firebase";
+import { auth, signIn, signInAnon} from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./css/SignIn.css";
 
@@ -56,6 +56,12 @@ function SignIn() {
 				<div>
 					Don't have an account? <Link style={{ textDecoration: 'underline' }} to="/signup">Register</Link> now.
 				</div>
+				<button
+					className="login__btn login__anon__btn"
+					onClick={() => signInAnon()}
+				>
+					Sign in anonymously
+				</button>
 			</div>
 		</div>
 	);

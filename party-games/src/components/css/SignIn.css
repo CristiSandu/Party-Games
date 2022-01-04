@@ -25,6 +25,12 @@
     color: white;
     background-color: black;
   }
+
+  .login__anon__btn {
+    margin-top: 15px;
+    margin-bottom: 0px;
+  }
+
   .login div {
     margin-top: 7px;
   }

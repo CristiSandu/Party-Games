@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, updateProfile, signInAnonymously} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInAnonymously} from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore"
 
 const firebaseConfig = {

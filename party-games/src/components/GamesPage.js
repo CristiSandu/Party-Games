@@ -12,15 +12,20 @@ function GamesPage() {
 
 	const fetchData = useCallback(async () => {
 		try {
-            const docRef = doc(db, "Users", user?.uid);
-            const docSnap = await getDoc(docRef);
-            const data = docSnap.data();
-			setName(data.name);
+            console.log(user?.isAnonymous)
+            if (user?.isAnonymous){
+                setName("Guest");
+            } else {
+                const docRef = doc(db, "Users", user?.uid);
+                const docSnap = await getDoc(docRef);
+                const data = docSnap.data();
+                setName(data.name);
+            }
 		} catch (err) {
 			console.error(err);
 			alert("An error occured while fetching user data");
 		}
-	},[user?.uid]);
+	},[user?.uid, user?.isAnonymous]);
 
     useEffect(() => {
 		if (loading) {
@@ -48,7 +53,9 @@ function GamesPage() {
             <div className="dashboard__container">
             Logged in as
             <div>{name}</div>
-            <div>{user?.email}</div>
+            {
+                user?.isAnonymous === false && <div>{user?.email}</div>
+            }
             <button className="dashboard__btn" onClick={signOut}>
                 Logout
             </button>
