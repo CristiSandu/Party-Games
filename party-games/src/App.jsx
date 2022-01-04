@@ -1,5 +1,3 @@
-import logo from "./assets/game_room.svg";
-
 import "./App.css";
 import ProfileCard from "./components/atoms/ProfileCard";
 import AboutCard from "./components/atoms/AboutCard";
