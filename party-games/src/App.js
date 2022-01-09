@@ -8,7 +8,7 @@ import RoomsPage from "./components/pages/RoomsPage";
 function App() {
   return (
     <Router>
-      <div classname="app">
+      <div className="app">
         <Routes>
           <Route exact path="/" element={<SignIn />}></Route>
           <Route exact path="/signup" element={<SignUp />}></Route>
