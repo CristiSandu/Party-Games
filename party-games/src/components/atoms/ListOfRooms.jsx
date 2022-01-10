@@ -27,9 +27,6 @@ export default function ListOfRooms({ rooms }) {
       ));
       return (
         <div className="space-y-8 h-full">
-          <div className="bg-liteGray space-y-24 p-4 items-center rounded-lg lg:w-auto md:w-full">
-            <h1 className="text-left font-bold text-2xl text-darkGreen">Rooms</h1>
-          </div>
           <div className="bg-liteGray space-y-4 p-4 items-center rounded-lg lg:w-auto md:w-full h-5/6 overflow-y-clip">
             {listOfRooms}
           </div>
