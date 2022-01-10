@@ -2,16 +2,45 @@ import React, { useState, useCallback } from "react";
 
 export default function CreateRoomForm() {
 
-    const [state, setFormState] = useState({ roomName: "", roomType: 0, numberOfUsers: 0 });
+    //roomType - 0 = private, 1 = public
+    const [state, setFormState] = useState({ roomName: "", roomType: 0, numberOfUsers: "" });
+
+    const handleRoomNameChange = (event) => {
+        if (!event || !event.target) {
+            return;
+        }
+        setFormState({ ...state, roomName: event.target.value });
+    };
+
+    const handleRoomTypeChange = (event) => {
+        if (!event || !event.target) {
+            return;
+        }
+        setFormState({ ...state, roomType: event.target.checked });
+    };
+
+    const handleNumberOfUsersChange = (event) => {
+        if (!event || !event.target) {
+            return;
+        }
+        setFormState({ ...state, numberOfUsers: parseInt(event.target.value) });
+    };
 
     const handleAddRoom = useCallback(() => {
         console.log("Handle add room...");
         console.log(state);
+        
+        if (!state.roomName || !state.numberOfUsers) {
+            alert("Please fill in all fields!");    
+            return;
+        }
+
+        //insert into firebase
     },[state]);
 
     const handleCancelRooom = useCallback(() => {
         console.log("Handle cancel room...");
-        setFormState({ roomName: "", roomType: 0, numberOfUsers: 0 });
+        setFormState({ roomName: "", roomType: 0, numberOfUsers: "" });
     },[]);
 
     return (
@@ -23,20 +52,25 @@ export default function CreateRoomForm() {
                     </div>
                     <div className="bg-liteGray space-y-4 p-4 items-center rounded-lg lg:w-auto md:w-full h-5/6 overflow-y-clip">
                         <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
-                            {/* <button className="text-darkGreen font-bold text-xl"> Room name... </button> */}
-                            <input className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent" id="roomName" type="text" placeholder="Please introduce room name..."/>
+                            <input className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent" id="roomName" type="text" placeholder="Please introduce room name..." required
+                            value = {state.roomName}
+                            onChange = {handleRoomNameChange}
+                            />
                         </div>
-                        <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full form-check">
-                            {/* <button className="text-darkGreen font-bold text-xl"> Type (Open/Private) </button> */}
-                            <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault"/>
-                            <label className="form-check-label inline-block text-darkGreen font-bold text-xl" htmlFor="flexCheckDefault"  defaultChecked={true}>
-                                Default checkbox
+                        <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full form-check flex flex-row items-baseline">
+                            <input className="form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="flexCheckDefault"
+                            checked = {state.roomType}
+                            onChange={handleRoomTypeChange}
+                            />
+                            <label className="form-check-label inline-block text-darkGreen font-bold text-xl" htmlFor="flexCheckDefault">
+                                Make room public
                             </label>
 
                         </div>
                         <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
-                            {/* <button className="text-darkGreen font-bold text-xl"> Number of users </button> */}
-                            <input className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent" id="numberPlayers" type="number" placeholder="Please introduce the number of players..."/>
+                            <input className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent" id="numberPlayers" type="number" placeholder="Please introduce the number of players..." required
+                            value = {state.numberOfUsers}
+                            onChange={handleNumberOfUsersChange}/>
                         </div>
                         <div className="flex flex-row justify-between text-center">
                             <div className="bg-greenBlue p-4 rounded-lg w-2/5 md:w-2/5 cursor-pointer"
@@ -52,33 +86,5 @@ export default function CreateRoomForm() {
                 </div>
             </div>
         </div>
-        // <div class="w-full max-w-xs">
-        //     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        //         <div class="mb-4">
-        //         <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-        //             Username
-        //         </label>
-        //         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username"/>
-        //         </div>
-        //         <div class="mb-6">
-        //         <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-        //             Password
-        //         </label>
-        //         <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************"/>
-        //         <p class="text-red-500 text-xs italic">Please choose a password.</p>
-        //         </div>
-        //         <div class="flex items-center justify-between">
-        //         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        //             Sign In
-        //         </button>
-        //         <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-        //             Forgot Password?
-        //         </a>
-        //         </div>
-        //     </form>
-        //     <p class="text-center text-gray-500 text-xs">
-        //         &copy;2020 Acme Corp. All rights reserved.
-        //     </p>
-        // </div>
     )
 }
