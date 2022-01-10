@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import "./css/GamesPage.css";
-import { auth, db } from "../firebase";
+import "../css/GamesPage.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
-import ProfileCard from "./atoms/ProfileCard";
-import AboutCard from "./atoms/AboutCard";
-import ListOfGamesCard from "./atoms/ListOfGamesCard";
+import ProfileCard from "../atoms/ProfileCard";
+import AboutCard from "../atoms/AboutCard";
+import ListOfGamesCard from "../atoms/ListOfGamesCard";
 
 function GamesPage() {
   const [user, loading, error] = useAuthState(auth);
