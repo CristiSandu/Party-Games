@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ListOfRooms from "../atoms/ListOfRooms";
 import ProfileCard from "../atoms/ProfileCard";
+import { useNavigate } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase";
 import AddRoomCard from "../atoms/AddRoomCard";
 import CreateRoomForm from "../atoms/CreateRoomForm";
+import { doc, getDoc } from "firebase/firestore";
+
+import { collection, getDocs } from "firebase/firestore";
 
 import GameImage from "../../assets/game_room.svg";
 import AddRoomImage from "../../assets/add_room.svg";
@@ -14,37 +18,62 @@ export default function RoomsPage() {
   const [rooms, setRooms] = useState([]);
   const [user, loading, error] = useAuthState(auth);
   const [isRoomList, setIsRoomList] = useState(true);
+  const [name, setName] = useState("");
+  const [roomsNumber, setRoomsNumber] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const dummyRooms = [
-      {
-        id: "dasdsadaaa",
-        title: "Room 1",
-        gameType: "Fibbage",
-        currPlayers: 6,
-        maxPlayers: 10,
-        isLocked: false,
-      },
-      {
-        id: "daxcxzxc",
-        title: "Room 2",
-        gameType: "Trivia",
-        currPlayers: 2,
-        maxPlayers: 10,
-        isLocked: true,
-      },
-      {
-        id: "mmsmsmsasadsa",
-        title: "Room 3",
-        gameType: "Trivia",
-        currPlayers: 4,
-        maxPlayers: 10,
-        isLocked: false,
-      },
-    ];
+    if (loading) {
+      return (
+        <div>
+          <p>Initialising User...</p>
+        </div>
+      );
+    }
+    if (error) {
+      return (
+        <div>
+          <p>Error: {error}</p>
+        </div>
+      );
+    }
+    if (!user) {
+      return navigate("/");
+    }
 
-    setRooms(dummyRooms);
-  }, []);
+    async function fetchData() {
+    	try {
+			console.log(user?.isAnonymous);
+			if (user?.isAnonymous) {
+				setName("Guest");
+			} else {
+				const docRef = doc(db, "Users", user?.uid);
+				const docSnap = await getDoc(docRef);
+				const data = docSnap.data();
+				setName(data.name);
+			}
+
+			const roomsSnapshot = await getDocs(collection(db, "Rooms"));
+			console.log(roomsSnapshot)
+
+			const allRooms=[];
+			roomsSnapshot.forEach((doc) => {
+				allRooms.push({...doc.data(), id: doc.id});
+			});
+
+			setRooms(allRooms);
+			setRoomsNumber(allRooms.length);
+
+			console.log(rooms);
+		} catch (err) {
+			console.error(err);
+			alert("An error occured while fetching user data");
+    	}
+    }
+
+    fetchData();
+
+  }, [user, loading, error]);
 
   const toggleAddRoom = useCallback(() => {
     setIsRoomList(!isRoomList);
@@ -53,11 +82,11 @@ export default function RoomsPage() {
   return (
     <div className="p-5 flex bg-darkGreen space-x-10 h-screen">
       <div className="space-y-7 w-1/3">
-        <ProfileCard className="w-28 h-1/5" name={"dan"} user={user} />
+        <ProfileCard className="w-28 h-1/5" name={name} user={user} />
         <AddRoomCard
           className="w-28 h-1/5"
           IsPress={false}
-          roomsNumber={5}
+          roomsNumber={roomsNumber}
           toggleAddRoom={toggleAddRoom}
         />
         {isRoomList ? (
@@ -71,7 +100,7 @@ export default function RoomsPage() {
         )}
       </div>
       <div className="space-y-7 w-2/3">
-        {isRoomList ? <ListOfRooms rooms={rooms} /> : <CreateRoomForm />}
+        {isRoomList ? <ListOfRooms rooms={rooms} user={user}/> : <CreateRoomForm />}
       </div>
     </div>
   );
