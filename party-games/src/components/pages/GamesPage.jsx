@@ -14,23 +14,6 @@ function GamesPage() {
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  const fetchData = useCallback(async () => {
-    try {
-      console.log(user?.isAnonymous);
-      if (user?.isAnonymous) {
-        setName("Guest");
-      } else {
-        const docRef = doc(db, "Users", user?.uid);
-        const docSnap = await getDoc(docRef);
-        const data = docSnap.data();
-        setName(data.name);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occured while fetching user data");
-    }
-  }, [user?.uid, user?.isAnonymous]);
-
   useEffect(() => {
     if (loading) {
       return (
@@ -49,8 +32,26 @@ function GamesPage() {
     if (!user) {
       return navigate("/");
     }
+
+    async function fetchData() {
+    	try {
+			console.log(user?.isAnonymous);
+			if (user?.isAnonymous) {
+				setName("Guest");
+			} else {
+				const docRef = doc(db, "Users", user?.uid);
+				const docSnap = await getDoc(docRef);
+				const data = docSnap.data();
+				setName(data.name);
+			}
+		} catch (err) {
+			console.error(err);
+			alert("An error occured while fetching user data");
+    	}
+    }
+
     fetchData();
-  }, [user, loading, error, navigate, fetchData]);
+  }, [user, loading, error]);
 
   const games = ["Trivia", "In Progress..", "In Progress.."];
 
