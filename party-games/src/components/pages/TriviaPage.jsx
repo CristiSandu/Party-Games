@@ -111,7 +111,7 @@ export default function TriviaPage() {
         </div>
         <div className="flex space-x-6">
           <div
-            className="bg-liteGray  font-bold text-darkGreen rounded-md flex-auto p-10 "
+            className="bg-liteGray cursor-pointer font-bold text-darkGreen rounded-md flex-auto p-10 "
             onClick={() => {
               alert("test");
             }}
@@ -119,7 +119,7 @@ export default function TriviaPage() {
             A: {quetions[0].answers.A}
           </div>
           <div
-            className="bg-liteGray font-bold text-darkGreen rounded-md flex-auto p-10"
+            className="bg-liteGray cursor-pointer font-bold text-darkGreen rounded-md flex-auto p-10"
             onClick={() => {
               alert("test");
             }}
@@ -129,7 +129,7 @@ export default function TriviaPage() {
         </div>
         <div className="flex space-x-6">
           <div
-            className="bg-liteGray font-bold text-darkGreen rounded-md flex-auto p-10"
+            className="bg-liteGray cursor-pointer font-bold text-darkGreen rounded-md flex-auto p-10"
             onClick={() => {
               alert("test");
             }}
@@ -137,7 +137,7 @@ export default function TriviaPage() {
             C: {quetions[0].answers.C}
           </div>
           <div
-            className="bg-liteGray font-bold text-darkGreen rounded-md flex-auto p-10"
+            className="bg-liteGray cursor-pointer font-bold text-darkGreen rounded-md flex-auto p-10"
             onClick={() => {
               alert("test");
             }}
