@@ -11,7 +11,7 @@ export default function ListOfGamesCard({ games }) {
       className="bg-greenBlue p-4 rounded-lg w-full md:w-full"
       onClick={() => {
         if (item === "Trivia") {
-            navigate("/rooms");
+          navigate("/rooms");
         }
       }}
     >
