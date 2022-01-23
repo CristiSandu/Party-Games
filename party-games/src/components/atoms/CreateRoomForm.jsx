@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
 
 export default function CreateRoomForm() {
-  //roomType - 0 = private, 1 = public
+  //roomType - 0 = public, 1 = private
   const [state, setFormState] = useState({
     roomName: "",
-    roomType: 0,
+    roomType: false,
+    roomPassword: "",
     numberOfUsers: "",
   });
 
@@ -19,7 +20,14 @@ export default function CreateRoomForm() {
     if (!event || !event.target) {
       return;
     }
-    setFormState({ ...state, roomType: event.target.checked });
+    setFormState({ ...state, roomType: event.target.checked, roomPassword: "" });
+  };
+
+  const handleRoomPasswordChange = (event) => {
+    if (!event || !event.target) {
+      return;
+    }
+    setFormState({ ...state, roomPassword: event.target.value });
   };
 
   const handleNumberOfUsersChange = (event) => {
@@ -38,6 +46,11 @@ export default function CreateRoomForm() {
       return;
     }
 
+    if (state.roomType && !state.roomPassword) {
+      alert("Please provide password for private room!");
+      return;
+    }
+
     //insert into firebase
   }, [state]);
 
@@ -45,6 +58,21 @@ export default function CreateRoomForm() {
     console.log("Handle cancel room...");
     setFormState({ roomName: "", roomType: 0, numberOfUsers: "" });
   }, []);
+
+  const renderRoomPasswordField = () => {
+    return (
+      <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
+        <input
+          className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent"
+          id="roomPassword"
+          type="password"
+          placeholder="Please introduce room password..."
+          value={state.roomPassword}
+          onChange={handleRoomPasswordChange}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex bg-darkGreen space-x-10 h-full">
@@ -79,9 +107,12 @@ export default function CreateRoomForm() {
                 className="form-check-label inline-block text-darkGreen font-bold text-xl"
                 htmlFor="flexCheckDefault"
               >
-                Make room public
+                Make room private
               </label>
             </div>
+            
+            { state.roomType ? renderRoomPasswordField() : null }
+            
             <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
               <input
                 className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent"
