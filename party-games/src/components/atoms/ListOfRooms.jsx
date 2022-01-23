@@ -29,7 +29,7 @@ export default function ListOfRooms({ rooms, user }) {
   const listOfRooms = rooms?.map((item) => (
     <div
       className="bg-greenBlue p-4 rounded-lg w-full md:w-full"
-      onClick={() => enterRoom(item.id, item.users.length)}
+      // onClick={() => enterRoom(item.id, item.users.length)}
       key={item.id}
     >
       <button className="text-darkGreen font-bold text-xl w-full">

@@ -7,6 +7,7 @@ export default function CreateRoomForm() {
     roomType: false,
     roomPassword: "",
     numberOfUsers: "",
+    roomGameType: "Trivia",
   });
 
   const handleRoomNameChange = (event) => {
@@ -14,6 +15,19 @@ export default function CreateRoomForm() {
       return;
     }
     setFormState({ ...state, roomName: event.target.value });
+  };
+
+  const handleRoomGameTypeChange = (event) => {
+    if (!event || !event.target) {
+      return;
+    }
+
+    if (!event.target.value || event.target.value === "") {
+      setFormState({ ...state, roomGameType: "Trivia" });
+      return;
+    }
+
+    setFormState({ ...state, roomGameType: event.target.value });
   };
 
   const handleRoomTypeChange = (event) => {
@@ -93,6 +107,17 @@ export default function CreateRoomForm() {
                 required
                 value={state.roomName}
                 onChange={handleRoomNameChange}
+              />
+            </div>
+            <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
+              <input
+                className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent"
+                id="gameType"
+                type="text"
+                placeholder="Please introduce game type (by default is Trivia)..."
+                required
+                value={state.roomGameType}
+                onChange={handleRoomGameTypeChange}
               />
             </div>
             <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full form-check flex flex-row items-baseline">
