@@ -1,14 +1,19 @@
 import React, { useState, useCallback } from "react";
+import { auth, db } from "../../firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom"; 
 
 export default function CreateRoomForm() {
-  //roomType - 0 = public, 1 = private
   const [state, setFormState] = useState({
     roomName: "",
     roomType: false,
     roomPassword: "",
-    numberOfUsers: "",
     roomGameType: "Trivia",
   });
+
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
 
   const handleRoomNameChange = (event) => {
     if (!event || !event.target) {
@@ -44,18 +49,11 @@ export default function CreateRoomForm() {
     setFormState({ ...state, roomPassword: event.target.value });
   };
 
-  const handleNumberOfUsersChange = (event) => {
-    if (!event || !event.target) {
-      return;
-    }
-    setFormState({ ...state, numberOfUsers: parseInt(event.target.value) });
-  };
-
   const handleAddRoom = useCallback(() => {
     console.log("Handle add room...");
     console.log(state);
 
-    if (!state.roomName || !state.numberOfUsers) {
+    if (!state.roomName) {
       alert("Please fill in all fields!");
       return;
     }
@@ -64,13 +62,30 @@ export default function CreateRoomForm() {
       alert("Please provide password for private room!");
       return;
     }
-
-    //insert into firebase
+    console.log(state.roomType);
+    async function updateDB() {
+      const docRef = await addDoc(collection(db, "Rooms"), {
+        name: state.roomName,
+        game: "Trivia",
+        is_private: (state.roomType === true),
+        pass: (state.roomType === true ? state.roomPassword : null),
+        has_started: false,
+        users: [{
+          uid: user.uid,
+          role: "admin",
+          points: 0,
+          isAnon: user.isAnonymous
+        }]
+      });
+      console.log("Document written with ID: ", docRef.id);
+      return navigate("/trivia");
+    }
+    updateDB();
   }, [state]);
 
   const handleCancelRooom = useCallback(() => {
     console.log("Handle cancel room...");
-    setFormState({ roomName: "", roomType: 0, numberOfUsers: "" });
+    setFormState({ roomName: "", roomType: 0});
   }, []);
 
   const renderRoomPasswordField = () => {
@@ -138,17 +153,6 @@ export default function CreateRoomForm() {
             
             { state.roomType ? renderRoomPasswordField() : null }
             
-            <div className="bg-greenBlue p-4 rounded-lg w-full md:w-full">
-              <input
-                className="rounded w-full text-darkGreen font-bold text-xl focus:outline-none focus:shadow-outline bg-transparent"
-                id="numberPlayers"
-                type="number"
-                placeholder="Please introduce the number of players..."
-                required
-                value={state.numberOfUsers}
-                onChange={handleNumberOfUsersChange}
-              />
-            </div>
             <div className="flex flex-row justify-between text-center">
               <div
                 className="bg-greenBlue p-4 rounded-lg w-2/5 md:w-2/5 cursor-pointer"

@@ -67,6 +67,10 @@ export default function TriviaPage() {
     },
   ];
 
+  const exitGame = () => {
+    navigate("/rooms");
+  }
+
   const funFuct = [
     {
       title: "How long is an Olympic swimming pool (in meters)?",
@@ -159,6 +163,9 @@ export default function TriviaPage() {
           isInGame={true}
           user={user}
         />
+        <button onClick={exitGame}>
+        Exit
+        </button>
       </div>
     </div>
   );
