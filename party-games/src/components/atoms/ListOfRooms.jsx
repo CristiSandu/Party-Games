@@ -11,7 +11,7 @@ export default function ListOfRooms({ rooms, user }) {
 
 	const navigate = useNavigate();
 
-	async function enterRoom (roomId, nrOfUsers) {
+	async function enterRoom (roomId, nrOfUsers, pass) {
 		const roomRef = doc(db, "Rooms", roomId);
 
 		console.log(nrOfUsers);
@@ -26,7 +26,14 @@ export default function ListOfRooms({ rooms, user }) {
 			})
 		});
 
-		navigate("/trivia");
+    console.log(pass)
+    if (pass != null) {
+      const response = prompt("Enter room password");
+      if (response === pass) {
+        navigate("/trivia");
+      }
+      else return;
+    }
 
 	}
 
@@ -85,7 +92,7 @@ export default function ListOfRooms({ rooms, user }) {
         </div>
         <button
           className="bg-greenBlue text-darkGreen font-bold text-xl rounded-lg px-4 py-2 mt-2"
-          onClick={() => enterRoom(details.id, details.users.length)}
+          onClick={() => enterRoom(details.id, details.users.length, details.pass)}
         >
           Join Room
         </button>
