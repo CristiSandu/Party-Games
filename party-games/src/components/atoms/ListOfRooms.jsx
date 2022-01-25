@@ -34,6 +34,7 @@ export default function ListOfRooms({ rooms, user }) {
       }
       else return;
     }
+    navigate("/trivia");
 
 	}
 
