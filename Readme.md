@@ -1,8 +1,8 @@
-# Party Games 
+# 🎉 Party Games 
 
 A party games web app in **React js**, **Firebase** and **Tailwind CSS**.
 
-# Demos 
+# 💻 Frontend 
 
 | | |  
 |:--|:--|
